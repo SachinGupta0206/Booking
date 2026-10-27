@@ -140,25 +140,29 @@ curl -s -X DELETE $BASE/bookings/$BOOKING_ID -o /dev/null -w "%{http_code}\n"
 
 ### Step 1: Deploy Backend to Render
 
-#### Option A: One-click Blueprint (Recommended)
+**Manual Web Service (Recommended):**
 
 1. Push this repo to GitHub.
-2. Go to [Render Dashboard](https://dashboard.render.com) → **Blueprints** → **New Blueprint Instance**.
-3. Connect your repo → Render reads `render.yaml` automatically.
-4. Set these **secret** env vars in the Render dashboard:
+2. Go to [Render Dashboard](https://dashboard.render.com) → **New +** → **Web Service**.
+3. Connect your GitHub repo.
+4. Configure:
+   - **Name**: `event-booking-api`
+   - **Region**: Oregon (or closest)
+   - **Root Directory**: `backend` ⚠️ **IMPORTANT**
+   - **Environment**: Node
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npm start`
+   - **Plan**: Free
+5. Click **Advanced** → Add **Environment Variables**:
+   - `NODE_VERSION` = `20.14.0`
    - `SUPABASE_URL` = `https://heysljqldxsttsqzdnnf.supabase.co`
-   - `SUPABASE_SERVICE_ROLE_KEY` = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` (your full key)
-   - `FRONTEND_URL` = `https://your-app.vercel.app` (update after Step 2)
-5. Deploy → copy the backend URL (e.g., `https://event-booking-api.onrender.com`).
+   - `SUPABASE_SERVICE_ROLE_KEY` = (paste your full key from above)
+   - `FRONTEND_URL` = `http://localhost:5173` (temporary; update after Step 2)
+6. Click **Create Web Service** → wait 3-5 minutes for build.
+7. Copy the backend URL (e.g., `https://event-booking-api.onrender.com`).
+8. Test: `curl https://YOUR-URL.onrender.com/health` → should return `{"status":"ok"}`
 
-#### Option B: Manual Web Service
-
-1. New **Web Service**, connect the repo, set **Root Directory** to `backend`.
-2. Build: `npm install && npm run build`. Start: `npm start`.
-3. Set the env vars above in the dashboard. Render injects `PORT` automatically.
-4. Deploy → copy the backend URL.
-
-Health check endpoint: `/health`
+**Note:** Render injects `PORT` automatically. Health check endpoint is `/health`.
 
 ### Step 2: Deploy Frontend to Vercel
 

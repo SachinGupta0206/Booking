@@ -3,9 +3,9 @@
 services:
   - type: web
     name: event-booking-api
-    env: node
-    region: oregon
+    runtime: node
     plan: free
+    region: oregon
     rootDir: backend
     buildCommand: npm install && npm run build
     startCommand: npm start
