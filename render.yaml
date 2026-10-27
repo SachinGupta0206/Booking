@@ -1,0 +1,22 @@
+# Render Blueprint for the backend API.
+# Docs: https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: event-booking-api
+    env: node
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "20.14.0"
+      # Set these secret values in the Render dashboard.
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
